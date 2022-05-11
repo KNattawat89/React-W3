@@ -5,10 +5,30 @@ import Header from "./HeaderComponent";
 import Footer from "./FooterComponent";
 import Home from "./HomeComponent";
 import Contact from "./ContactComponent";
-import { Switch, Route, Redirect } from "react-router-dom";
 import { COMMENTS } from "../shared/comments";
 import { PROMOTIONS } from "../shared/promotions";
 import { LEADERS } from "../shared/leaders";
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+  return {
+    dishes: state.dishes,
+    comments: state.comments,
+    promotions: state.promotions,
+    leaders: state.leaders
+  }
+}
+
+const HomePage = () => {
+  return(
+      <Home 
+          dish={this.props.dishes.filter((dish) => dish.featured)[0]}
+          promotion={this.props.promotions.filter((promo) => promo.featured)[0]}
+          leader={this.props.leaders.filter((leader) => leader.featured)[0]}
+      />
+  );
+}
 
 class Main extends Component {
   constructor(props) {
@@ -40,34 +60,19 @@ class Main extends Component {
     return (
       <div>
         <Header />
-        <Switch>
-          <Route path="/home" component={HomePage} />
-          <Route
-            exact
-            path="/menu"
-            component={() => (
-              <Menu
-                dishes={this.state.dishes}
-                comments={this.state.comments.filter((comment) => {
-                  return comment.dishId === this.state.selectedDish;
-                })}
-                selectedDish={
-                  this.state.dishes.filter((dish) => {
-                    return dish.id === this.state.selectedDish;
-                  })[0]
-                }
-                onClick={(dishId) => this.onDishSelect(dishId)}
-              />
-            )}
-          />
-          <Route exact path="/contactus" component={Contact} />
-          <Redirect to="/home" />
-        </Switch>
-
+        <div>
+          <Switch>
+              <Route path='/home' component={HomePage} />
+              <Route exact path='/menu' component={() => <Menu dishes={this.props.dishes} />} />
+              <Route exact path='/contactus' component={Contact} />
+              <Redirect to="/home" />
+          </Switch>
+        </div>
         <Footer />
       </div>
     );
   }
 }
 
-export default Main;
+export default withRouter(connect(mapStateToProps)(Main));
+
