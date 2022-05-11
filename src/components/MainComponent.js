@@ -10,7 +10,7 @@ import { PROMOTIONS } from "../shared/promotions";
 import { LEADERS } from "../shared/leaders";
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
-
+import DishDetail from "./DishDetailComponent";
 const mapStateToProps = state => {
   return {
     dishes: state.dishes,
@@ -19,6 +19,7 @@ const mapStateToProps = state => {
     leaders: state.leaders
   }
 }
+
 
 const HomePage = () => {
   return(
@@ -29,6 +30,7 @@ const HomePage = () => {
       />
   );
 }
+
 
 class Main extends Component {
   constructor(props) {
@@ -47,6 +49,12 @@ class Main extends Component {
   }
 
   render() {
+    const DishWithId = ({match}) => {
+      return(
+          <DishDetail comments={this.props.comments} dishes={this.props.dishes} selectedDish={match.params.dishId} />
+      );
+    };
+    
     const HomePage = () => {
       return (
         <Home
@@ -64,6 +72,7 @@ class Main extends Component {
           <Switch>
               <Route path='/home' component={HomePage} />
               <Route exact path='/menu' component={() => <Menu dishes={this.props.dishes} />} />
+              <Route path='/menu/:dishId' component={DishWithId} />
               <Route exact path='/contactus' component={Contact} />
               <Redirect to="/home" />
           </Switch>
