@@ -11,6 +11,7 @@ import { LEADERS } from "../shared/leaders";
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
 import DishDetail from "./DishDetailComponent";
+// import CommentForm from "./DishDetailComponent"
 const mapStateToProps = state => {
   return {
     dishes: state.dishes,
@@ -52,9 +53,10 @@ class Main extends Component {
     const DishWithId = ({match}) => {
       return(
           <DishDetail comments={this.props.comments} dishes={this.props.dishes} selectedDish={match.params.dishId} />
+         
       );
     };
-    
+
     const HomePage = () => {
       return (
         <Home
